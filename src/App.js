@@ -1,9 +1,15 @@
-import './App.css';
+import { GlobalStyle } from './GlobalStyles';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Phone from './components/phone/Phone'
+
 
 function App() {
   return (
     <div className="App">
-      Hello
+      <GlobalStyle />
+      <Router>
+        <Route exact path="/" component={Phone} />
+      </Router>
     </div>
   );
 }
