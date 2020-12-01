@@ -7,30 +7,51 @@ import Profile from './components/profile/Profile';
 import VerifyEmail from './components/verifyemail/VerifyEmail';
 import SignUp from './components/signup/SignUp';
 import AuthRoute from './routes/AuthRoute';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
-
-
 
   return (
     <div className="App">
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route exact path="/" component={Phone} />
-          <Route exact path="/otp" component={Otp} />
-          <Route exact path="/email" component={Email} />
-          <Route exact path="/verifyemail" component={VerifyEmail} />
-          <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/">
+            <Phone toast={toast} />
+          </Route>
+          <Route exact path='/otp'>
+            <Otp toast={toast} />
+          </Route>
+          <Route exact path="/email">
+            <Email toast={toast} />
+          </Route>
+          <Route exact path="/verifyemail">
+            <VerifyEmail toast={toast} />
+          </Route>
+          <Route exact path="/signup">
+            <SignUp toast={toast} />
+          </Route>
           <AuthRoute exact path="/profile">
-            <Profile />
+            <Profile toast={toast} />
           </AuthRoute>
           <Route path="*">
             <div>404 Not found </div>
           </Route>
 
         </Switch>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Router>
     </div>
   );

@@ -18,7 +18,6 @@ const VerifyEmail = () => {
     }
 
     const submitHandler = async (data, e) => {
-
         try {
             const response = await postData('POST', {
                 email: getEmail(),
@@ -63,8 +62,6 @@ const VerifyEmail = () => {
             console.log(err);
         }
     }
-
-
 
     return (
         <>
