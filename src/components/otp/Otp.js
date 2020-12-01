@@ -3,20 +3,12 @@ import { useHistory } from 'react-router-dom';
 import { validateNumber, postData } from '../../utils/utils';
 import { storeUserDetails, clearStorage } from '../../utils/localStore';
 import { getPhone, getToken } from '../../utils/localRetrieve';
+import { OtpForm, OtpPage, Resend } from './OtpElements'
 
 const Otp = ({ toast }) => {
 
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
-
-    const formStyles = {
-        margin: '0 auto',
-        marginTop: '100px',
-        width: '40%',
-        padding: '2rem',
-        height: '40%',
-        border: '2px solid black'
-    }
 
     const submitHandler = async (data, e) => {
 
@@ -78,26 +70,29 @@ const Otp = ({ toast }) => {
     }
 
     return (
-        <>
-            <form style={formStyles} onSubmit={handleSubmit(submitHandler)}>
-                <label>Enter OTP</label>
+        <OtpPage>
+            <OtpForm onSubmit={handleSubmit(submitHandler)}>
+                <label>Enter OTP</label><br />
                 <input type='tel'
                     name='verificationCode'
                     autoFocus={true}
                     maxLength='4'
                     onKeyDown={(e) => validateNumber(e)}
                     ref={register({
-                        required: true,
-                        minLength: 4
+                        required: 'OTP is required',
+                        minLength: {
+                            value: 4,
+                            message: 'Please enter your valid OTP'
+                        }
                     })} /><br />
-                <p>{(errors.verificationCode?.type === 'required' || errors.verificationCode?.type === 'minLength') && 'Enter a valid OTP Number'}</p><br />
-                <button>submit</button>
-            </form>
-            <div>
-                <h3>Didn't get OTP?</h3>
+                {errors.verificationCode && <p>{errors.verificationCode.message}</p>}<br /><br />
+                <button>Verify OTP</button>
+            </OtpForm>
+            <Resend>
+                <p>Didn't get OTP?</p>
                 <button onClick={resendHandler}>Resend OTP</button>
-            </div>
-        </>
+            </Resend>
+        </OtpPage>
     )
 }
 

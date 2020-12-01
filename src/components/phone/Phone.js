@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom';
 import { validateNumber, postData } from '../../utils/utils';
 import { storePhoneAndToken } from '../../utils/localStore';
+import { PhonePage, Form, Title } from './PhoneElements';
 
 
 
@@ -9,48 +10,48 @@ const Phone = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
-
-    const formStyles = {
-        margin: '0 auto',
-        marginTop: '100px',
-        width: '40%',
-        padding: '2rem',
-        height: '40%',
-        border: '2px solid black'
-    }
-
+    //
     const submitHandler = async (data) => {
-
-        const response = await postData('POST', data, 'users/phone');
-        console.log(response);
-        if (response.success) {
-            const { token } = response.results;
-            const { phoneNumber } = data;
-            storePhoneAndToken(phoneNumber, token)
-            history.push('/otp')
-            toast.success(response.message);
+        try {
+            const response = await postData('POST', data, 'users/phone');
+            if (response.success) {
+                const { token } = response.results;
+                const { phoneNumber } = data;
+                storePhoneAndToken(phoneNumber, token)
+                history.push('/otp')
+                toast.success(response.message);
+            }
+        } catch (err) {
+            toast.error('INTERNAL SERVER ERROR. TRY AGAIN LATER')
         }
     }
 
 
     return (
-        <>
-            <form style={formStyles} onSubmit={handleSubmit(submitHandler)}>
-                <label>Phone Number</label>
+        <PhonePage>
+            <Title>
+                <h1>Welcome to Basis!</h1>
+                <h3>Your Money, Your Way</h3>
+                <p>Enter your mobile number to get started</p>
+            </Title>
+            <Form onSubmit={handleSubmit(submitHandler)}>
+                <label>Phone Number</label><br />
                 <input type='tel'
                     name='phoneNumber'
                     autoFocus={true}
                     maxLength='10'
                     onKeyDown={(e) => validateNumber(e)}
                     ref={register({
-                        required: true,
-                        minLength: 10
+                        required: 'Phone number is required',
+                        minLength: {
+                            value: 10,
+                            message: 'Please enter a valid phone number'
+                        }
                     })} /><br />
-                <p>{(errors.phoneNumber?.type === 'required' || errors.phoneNumber?.type === 'minLength') && 'Enter a valid 10 digit Phone Number'}</p><br />
-                <button>submit</button>
-            </form>
-
-        </>
+                {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}<br />
+                <button>Send OTP</button>
+            </Form>
+        </PhonePage>
 
     )
 }

@@ -2,24 +2,12 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { getId, getUserToken, getPhone, getFirstName, getLastName } from '../../utils/localRetrieve';
 import { clearStorage } from '../../utils/localStore';
-import { authUpdate, logoutProfile } from '../../utils/utils'
-import { toast } from 'react-toastify';
+import { authUpdate, logoutProfile } from '../../utils/utils';
+import { ProfilePage, ProfileForm, Button } from './ProfileElements'
 
-const Profile = () => {
+const Profile = ({ toast }) => {
     const history = useHistory();
-    const { register, handleSubmit } = useForm();
-
-    const formStyles = {
-        margin: '0 auto',
-        marginTop: '100px',
-        width: '60%',
-        padding: '2rem',
-        height: '70%',
-        border: '2px solid black',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around'
-    }
+    const { register, handleSubmit, errors } = useForm();
 
     const onSubmit = async (data) => {
         try {
@@ -47,18 +35,50 @@ const Profile = () => {
     }
 
     return (
-        <div>
-            <h1>Welcome to Basis </h1>
-            <h3>Edit your Profile</h3>
-            <form style={formStyles} onSubmit={handleSubmit(onSubmit)}>
-                <input type="text" placeholder="First name" name="firstName" defaultValue={getFirstName()} ref={register({ required: true, maxLength: 80 })} /><br />
-                <input type="text" placeholder="Last name" name="lastName" defaultValue={getLastName()} ref={register({ required: true, maxLength: 100 })} /><br />
+        <ProfilePage>
+            <ProfileForm onSubmit={handleSubmit(onSubmit)}>
+                <h2>Update your profile</h2><br />
+                <label>First Name</label>
+                <input type="text"
+                    placeholder="First name"
+                    name="firstName"
+                    defaultValue={getFirstName()}
+                    ref={register({
+                        required: 'First Name is Required',
+                        minLength: {
+                            value: 2,
+                            message: 'Minimum characters should be 2'
+                        },
+                        pattern: {
+                            value: /^[a-z][a-z'-]{2,}$/i,
+                            message: 'Enter only alphabets'
+                        }
+                    })} /><br />
+                {errors.firstName && <p>{errors.firstName.message}</p>}<br />
+                <label>Last Name</label>
+                <input type="text"
+                    placeholder="Last name"
+                    name="lastName"
+                    defaultValue={getLastName()}
+                    ref={register({
+                        required: 'Last Name is Required',
+                        minLength: {
+                            value: 2,
+                            message: 'Minimum characters should be 2'
+                        },
+                        pattern: {
+                            value: /^[a-z][a-z'-]{2,}$/i,
+                            message: 'Enter only alphabets'
+                        }
+                    })} /><br />
+                {errors.lastName && <p>{errors.lastName.message}</p>}<br />
+                <label>Phone Number</label>
                 <input type="tel" placeholder="Mobile number" defaultValue={getPhone()} name="phone_Number" readOnly ref={register} /><br />
 
                 <button type="submit">Update</button>
-            </form>
-            <button onClick={logOutHandler}>Log Out</button>
-        </div>
+            </ProfileForm>
+            <Button onClick={logOutHandler}>Log Out</Button>
+        </ProfilePage>
     )
 }
 

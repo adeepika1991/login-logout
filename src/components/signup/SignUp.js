@@ -4,24 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { getToken, getEmail, getPhone } from '../../utils/localRetrieve';
 import { postData, urlData } from '../../utils/utils';
 import { storeUserDetails } from '../../utils/localStore'
-import { toast } from 'react-toastify';
+import { SignUpForm, SignUpPage } from './SignUpElements'
 
-const SignUp = () => {
+const SignUp = ({ toast }) => {
     const history = useHistory();
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, errors } = useForm();
     const [referralMessage, setReferralMessage] = useState('');
-
-    const formStyles = {
-        margin: '0 auto',
-        marginTop: '100px',
-        width: '60%',
-        padding: '2rem',
-        height: '70%',
-        border: '2px solid black',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around'
-    }
 
     const onSubmit = async (data) => {
         try {
@@ -55,18 +43,53 @@ const SignUp = () => {
     }
 
     return (
-        <form style={formStyles} onSubmit={handleSubmit(onSubmit)}>
-            <p>{referralMessage} </p>
-            <input type="text" placeholder="First name" name="firstName" maxLength='20' ref={register({ required: true, minLength: 2, pattern: /^[a-z][a-z'-]{2,}$/i })} /><br />
-            <input type="text" placeholder="Last name" name="lastName" maxLength='20' ref={register({ required: true, minLength: 2, pattern: /^[a-z][a-z'-]{2,}$/i })} /><br />
-            <label htmlFor="lastName">Reference Code</label>
-            <input name="referredCodeKey" type='text' onBlur={onBlurHandle} maxLength='6' ref={register} /><br />
-            <input type="text" placeholder="Email" name="email" defaultValue={getEmail()} readOnly ref={register} /><br />
-            <input type="tel" placeholder="Mobile number" defaultValue={getPhone()} name="phoneNumber" readOnly ref={register} /><br />
-            <input type="checkbox" name="agreeToPrivacyPolicy" ref={register({ required: true })} /><span>I agree to terms and policy</span><br />
-
-            <input type="submit" />
-        </form>
+        <SignUpPage>
+            <SignUpForm onSubmit={handleSubmit(onSubmit)}>
+                <h2>Sign Up to Basis</h2><br />
+                <h4>{referralMessage} </h4>
+                <label>First Name</label>
+                <input type="text"
+                    name="firstName"
+                    maxLength='20'
+                    ref={register({
+                        required: 'First Name is Required',
+                        minLength: {
+                            value: 2,
+                            message: 'Minimum characters should be 2'
+                        },
+                        pattern: {
+                            value: /^[a-z][a-z'-]{2,}$/i,
+                            message: 'Enter only alphabets'
+                        }
+                    })} /><br />
+                {errors.firstName && <p>{errors.firstName.message}</p>}<br />
+                <label>Last Name</label>
+                <input type="text"
+                    name="lastName"
+                    maxLength='20'
+                    ref={register({
+                        required: 'Last Name is Required',
+                        minLength: {
+                            value: 2,
+                            message: 'Minimum characters should be 2'
+                        },
+                        pattern: {
+                            value: /^[a-z][a-z'-]{2,}$/i,
+                            message: 'Enter only alphabets'
+                        }
+                    })} /><br />
+                {errors.lastName && <p>{errors.lastName.message}</p>}<br />
+                <label htmlFor="referredCodeKey">Reference Code</label>
+                <input name="referredCodeKey" type='text' onBlur={onBlurHandle} maxLength='6' ref={register} /><br />
+                <label>Email</label>
+                <input type="text" name="email" defaultValue={getEmail()} readOnly ref={register} /><br />
+                <label>Phone Number</label>
+                <input type="tel" defaultValue={getPhone()} name="phoneNumber" readOnly ref={register} /><br />
+                <input type="checkbox" name="agreeToPrivacyPolicy" ref={register({ required: 'Agree to privacy policy' })} />&nbsp;<span>I agree to terms and policy</span><br />
+                {errors.agreeToPrivacyPolicy && <p>{errors.agreeToPrivacyPolicy.message}</p>}<br />
+                <button>Verify OTP</button>
+            </SignUpForm>
+        </SignUpPage>
     );
 }
 
