@@ -36,6 +36,7 @@ const VerifyEmail = () => {
                         } attempts remaining `)
                 }
                 else {
+                    console.log(response.message);
                     clearStorage();
                     history.push('/');
                 }

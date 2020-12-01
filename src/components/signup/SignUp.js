@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { getToken, getEmail, getPhone } from '../../utils/localRetrieve';
 import { postData, urlData } from '../../utils/utils';
+import { storeUserDetails } from '../../utils/localStore'
 
 const SignUp = () => {
     const history = useHistory();
@@ -30,6 +31,8 @@ const SignUp = () => {
             }, 'users');
             console.log(response);
             if (response.success) {
+                const { _id, token, firstName, lastName } = response.results.user;
+                storeUserDetails(_id, token, firstName, lastName);
                 history.push('/profile');
             } else {
                 history.push('/');
@@ -39,11 +42,6 @@ const SignUp = () => {
             console.log(err);
         }
     }
-
-
-
-
-
 
     const onBlurHandle = async (e) => {
         const response = await urlData(`users/referral/${e.target.value}`);

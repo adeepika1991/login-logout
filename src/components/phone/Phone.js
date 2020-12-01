@@ -37,7 +37,6 @@ const Phone = () => {
             <input type='tel'
                 name='phoneNumber'
                 autoFocus={true}
-                defaultValue={localStorage.getItem('phone_Number') || null}
                 maxLength='10'
                 onKeyDown={(e) => validateNumber(e)}
                 ref={register({
