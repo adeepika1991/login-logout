@@ -4,7 +4,7 @@ import { validateNumber, postData } from '../../utils/utils';
 import { storeUserDetails, clearStorage } from '../../utils/localStore';
 import { getPhone, getToken } from '../../utils/localRetrieve';
 
-const Otp = () => {
+const Otp = ({ toast }) => {
 
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
@@ -31,25 +31,28 @@ const Otp = () => {
 
                 if (!response.results.isLogin) {
                     history.push('/email')
+                    toast.success(response.message);
                 } else {
                     const { _id, token, firstName, lastName } = response.results.user;
                     storeUserDetails(_id, token, firstName, lastName);
+                    toast.success('Successfully Logged In');
                     history.push('/profile')
                 }
             } else {
                 if (response.messageObj.wrongOtpCount < 3) {
                     e.target.reset();
-                    console.log(`Wrong OTP, ${3 - response.messageObj.wrongOtpCount
+                    toast.error(`Wrong OTP, ${3 - response.messageObj.wrongOtpCount
                         } attempts remaining `)
                 }
                 else {
                     clearStorage();
+                    toast.warn(response.message);
                     history.push('/');
                 }
             }
         } catch (err) {
             clearStorage();
-            console.log('SERVER ERROR, PLEASE TRY ANOTHER NUMBER');
+            toast.error('SERVER ERROR, PLEASE TRY ANOTHER NUMBER');
             history.push('/');
 
         }
@@ -63,14 +66,14 @@ const Otp = () => {
             }, 'users/otp/resend');
 
             if (response.success) {
-                console.log(response.message);
+                toast.success(response.message);
             } else {
-                console.log(response.message);
+                toast.error(response.message);
                 clearStorage();
                 history.push('/');
             }
         } catch (err) {
-            console.log(err);
+            toast.error('Internal Server, Please Try after some time');
         }
     }
 

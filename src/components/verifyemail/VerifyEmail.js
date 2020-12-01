@@ -4,7 +4,7 @@ import { validateNumber, postData } from '../../utils/utils';
 import { getEmail, getToken } from '../../utils/localRetrieve';
 import { clearStorage } from '../../utils/localStore';
 
-const VerifyEmail = () => {
+const VerifyEmail = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
@@ -27,21 +27,22 @@ const VerifyEmail = () => {
             console.log(response);
 
             if (response.success) {
-                history.push('/signup')
+                history.push('/signup');
+                toast.success(response.message);
             } else {
                 if (response.messageObj.wrongEmailTokenCount < 3) {
                     e.target.reset()
-                    console.log(`Wrong Token, ${3 - response.messageObj.wrongEmailTokenCount
+                    toast.error(`Wrong Token, ${3 - response.messageObj.wrongEmailTokenCount
                         } attempts remaining `)
                 }
                 else {
-                    console.log(response.message);
+                    toast.error(response.message);
                     clearStorage();
                     history.push('/');
                 }
             }
         } catch (err) {
-            console.log(err);
+            toast.error('INTERNAL SERVER ERROR');
         }
     }
 
@@ -52,14 +53,14 @@ const VerifyEmail = () => {
                 token: getToken()
             }, 'users/token/resendtoken');
             if (response.success) {
-                console.log(response.message);
+                toast.success(response.message);
             } else {
-                console.log(response.message);
+                toast.error(response.message);
                 clearStorage();
                 history.push('/');
             }
         } catch (err) {
-            console.log(err);
+            toast.error('INTERNAL SERVER ERROR');
         }
     }
 

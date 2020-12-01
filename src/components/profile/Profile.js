@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { getId, getUserToken, getPhone, getFirstName, getLastName } from '../../utils/localRetrieve';
 import { clearStorage } from '../../utils/localStore';
 import { authUpdate, logoutProfile } from '../../utils/utils'
+import { toast } from 'react-toastify';
 
 const Profile = () => {
     const history = useHistory();
@@ -24,6 +25,7 @@ const Profile = () => {
         try {
             const response = await authUpdate('PUT', { ...data }, getId(), getUserToken());
             console.log(response);
+            toast.success(response.message);
         } catch (err) {
             console.log(err);
         }
@@ -37,6 +39,7 @@ const Profile = () => {
             if (response.success) {
                 clearStorage();
                 history.push('/')
+                toast.success(response.message)
             }
         } catch (err) {
             console.log(err);

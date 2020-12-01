@@ -3,8 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { postData } from '../../utils/utils'
 import { getPhone, getToken } from '../../utils/localRetrieve';
 import { clearStorage, storeEmail } from '../../utils/localStore';
+import { toast } from 'react-toastify';
 
-const Email = () => {
+const Email = ({ toast }) => {
 
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
@@ -32,12 +33,13 @@ const Email = () => {
             if (response.success) {
                 storeEmail(email);
                 history.push('/verifyemail');
+                toast.success(response.message)
             } else {
-                console.log(response.messageObj.message);
+                toast.error(response.messageObj.message);
                 e.target.reset();
             }
         } catch (err) {
-            console.log(err);
+            toast.error(err);
             clearStorage();
             history.push('/');
         }

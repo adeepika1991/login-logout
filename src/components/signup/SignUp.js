@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { getToken, getEmail, getPhone } from '../../utils/localRetrieve';
 import { postData, urlData } from '../../utils/utils';
 import { storeUserDetails } from '../../utils/localStore'
+import { toast } from 'react-toastify';
 
 const SignUp = () => {
     const history = useHistory();
@@ -33,13 +34,14 @@ const SignUp = () => {
             if (response.success) {
                 const { _id, token, firstName, lastName } = response.results.user;
                 storeUserDetails(_id, token, firstName, lastName);
+                toast.success(response.message)
                 history.push('/profile');
             } else {
                 history.push('/');
-                console.log(response.message);
+                toast.error(response.message);
             }
         } catch (err) {
-            console.log(err);
+            toast.error('INTERNAL SERVER ERROR');
         }
     }
 
