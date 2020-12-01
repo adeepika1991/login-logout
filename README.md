@@ -16,7 +16,8 @@
 7. Update Profile - ✔️
 8. Reverts back to homepage if the token is mishandled more than 3 times - ✔️
 9. Toast notification to user - ✔️
-
+10. Protected Profile Route - ✔️
+11. Forms Error handling - ✔️
 
 ## Missing Features 
 1. Invite Url with Autofilling Code - ❌
@@ -45,15 +46,17 @@ Due to the reason of not having any `GET` HTTP method, I simply have to
 extensively use `localStorage` for saving the token and id, as handling it with
 state will not be feasible, because when refreshed we lose all the important data.
 
+For the UX part, I didn't disable any buttons for error handling as this will not communicate to the users about errors.
+
 
 ## Hosted App
-Live app -> https://ecommercetshirts.netlify.app [![Netlify Status](https://api.netlify.com/api/v1/badges/81823404-284f-401d-97e9-29d02138cf1a/deploy-status)](https://app.netlify.com/sites/ecommercetshirts/deploys)
+Live app -> https://loginlogoutreact.netlify.app/ [![Netlify Status](https://api.netlify.com/api/v1/badges/c41be0cd-e40f-4778-8c5e-dff43cee3b11/deploy-status)](https://app.netlify.com/sites/loginlogoutreact/deploys)
 
-## Demo Image - Rendered View
+## Demo Image - Home View
 <img src='public/snap1.JPG' raw=true alt='assignment demo'/>
 
 
-## Demo Image - Cart View
+## Demo Image - Profile View
 <img src='public/snap2.JPG' raw=true alt='assignment demo'/>
 
 
