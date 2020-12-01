@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom';
 import { validateNumber, postData } from '../../utils/utils';
+import { storePhoneAndToken } from '../../utils/localStore'
 
 
 const Phone = () => {
@@ -19,11 +20,12 @@ const Phone = () => {
 
     const submitHandler = async (data) => {
 
-        const response = await postData(data, 'users/phone');
-        console.log(response);
+        const response = await postData('POST', data, 'users/phone');
+        //console.log(response);
         if (response.success) {
-            localStorage.setItem('login_Token', response.results.token);
-            localStorage.setItem('phone_Number', data.phoneNumber);
+            const { token } = response.results;
+            const { phoneNumber } = data;
+            storePhoneAndToken(phoneNumber, token)
             history.push('/otp')
         }
     }
@@ -34,6 +36,7 @@ const Phone = () => {
             <label>Phone Number</label>
             <input type='tel'
                 name='phoneNumber'
+                autoFocus={true}
                 defaultValue={localStorage.getItem('phone_Number') || null}
                 maxLength='10'
                 onKeyDown={(e) => validateNumber(e)}

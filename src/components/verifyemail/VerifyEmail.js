@@ -1,11 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { validateNumber, postData } from '../../utils/utils';
-import { storeUserDetails, clearStorage } from '../../utils/localStore';
-import { getPhone, getToken } from '../../utils/localRetrieve';
+import { getEmail, getToken } from '../../utils/localRetrieve';
+import { clearStorage } from '../../utils/localStore';
 
-const Otp = () => {
-
+const VerifyEmail = () => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
@@ -22,24 +21,18 @@ const Otp = () => {
 
         try {
             const response = await postData('POST', {
-                phoneNumber: getPhone(),
+                email: getEmail(),
                 token: getToken(),
                 ...data
-            }, 'users/phone/verify');
+            }, 'users/email/verify');
             console.log(response);
-            if (response.success) {
 
-                if (!response.results.isLogin) {
-                    history.push('/email')
-                } else {
-                    const { _id, token, firstName, lastName } = response.results.user;
-                    storeUserDetails(_id, token, firstName, lastName);
-                    history.push('/profile')
-                }
+            if (response.success) {
+                history.push('/signup')
             } else {
-                if (response.messageObj.wrongOtpCount < 3) {
-                    e.target.reset();
-                    console.log(`Wrong OTP, ${3 - response.messageObj.wrongOtpCount
+                if (response.messageObj.wrongEmailTokenCount < 3) {
+                    e.target.reset()
+                    console.log(`Wrong Token, ${3 - response.messageObj.wrongEmailTokenCount
                         } attempts remaining `)
                 }
                 else {
@@ -48,20 +41,16 @@ const Otp = () => {
                 }
             }
         } catch (err) {
-            clearStorage();
-            console.log('SERVER ERROR, PLEASE TRY ANOTHER NUMBER');
-            history.push('/');
-
+            console.log(err);
         }
     }
 
     const resendHandler = async () => {
         try {
             const response = await postData('PUT', {
-                phoneNumber: getPhone(),
+                email: getEmail(),
                 token: getToken()
-            }, 'users/otp/resend');
-
+            }, 'users/token/resendtoken');
             if (response.success) {
                 console.log(response.message);
             } else {
@@ -74,28 +63,30 @@ const Otp = () => {
         }
     }
 
+
+
     return (
         <>
             <form style={formStyles} onSubmit={handleSubmit(submitHandler)}>
-                <label>Enter OTP</label>
+                <label>Enter Email Token</label>
                 <input type='tel'
-                    name='verificationCode'
+                    name='verificationToken'
                     autoFocus={true}
-                    maxLength='4'
+                    maxLength='6'
                     onKeyDown={(e) => validateNumber(e)}
                     ref={register({
                         required: true,
-                        minLength: 4
+                        minLength: 6
                     })} /><br />
-                <p>{(errors.verificationCode?.type === 'required' || errors.verificationCode?.type === 'minLength') && 'Enter a valid OTP Number'}</p><br />
+                <p>{(errors.verificationToken?.type === 'required' || errors.verificationToken?.type === 'minLength') && 'Enter a valid verification number'}</p><br />
                 <button>submit</button>
             </form>
             <div>
-                <h3>Didn't get OTP?</h3>
-                <button onClick={resendHandler}>Resend OTP</button>
+                <h3>Didn't get email verification code?</h3>
+                <button onClick={resendHandler}>Resend verification code</button>
             </div>
         </>
     )
 }
 
-export default Otp
+export default VerifyEmail

@@ -13,9 +13,9 @@ export const validateNumber = (event) => {
 
 //Reusable post function
 
-export const postData = async (data, url) => {
+export const postData = async (method, data, url) => {
     const requestOptions = {
-        method: "POST",
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     };
@@ -28,3 +28,54 @@ export const postData = async (data, url) => {
     return postResponse;
 
 }
+
+export const urlData = async (url) => {
+    const requestOptions = {
+        method: 'PUT'
+    };
+    const response = await fetch(
+        `https://hiring.getbasis.co/candidate/${url}`,
+        requestOptions
+    );
+
+    const postResponse = await response.json();
+    return postResponse;
+}
+
+
+export const authUpdate = async (method, data, id, token) => {
+    const requestOptions = {
+        method,
+        headers: {
+            'Authorization': `Bearer ${id},${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    const response = await fetch(
+        `https://hiring.getbasis.co/candidate/users/${id}`,
+        requestOptions
+    );
+    const updateResponse = await response.json();
+    return updateResponse;
+}
+
+
+export const logoutProfile = async (id, token) => {
+    const requestOptions = {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${id},${token}`,
+            'Content-Type': 'application/json'
+        }
+    }
+    const response = await fetch(
+        `https://hiring.getbasis.co/candidate/users/logout/${id}`,
+        requestOptions
+    );
+    const logoutResponse = await response.json();
+    return logoutResponse;
+}
+
+
+export const BASEURL = 'https://hiring.getbasis.co/candidate';
