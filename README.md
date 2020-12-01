@@ -53,10 +53,10 @@ For the UX part, I didn't disable any buttons for error handling as this will no
 Live app -> https://loginlogoutreact.netlify.app/ [![Netlify Status](https://api.netlify.com/api/v1/badges/c41be0cd-e40f-4778-8c5e-dff43cee3b11/deploy-status)](https://app.netlify.com/sites/loginlogoutreact/deploys)
 
 ## Demo Image - Home View
-<img src='public/snap1.JPG' raw=true alt='assignment demo'/>
+<img src='public/snap1.jpg' raw=true alt='assignment demo'/>
 
 
 ## Demo Image - Profile View
-<img src='public/snap2.JPG' raw=true alt='assignment demo'/>
+<img src='public/snap2.jpg' raw=true alt='assignment demo'/>
 
 
