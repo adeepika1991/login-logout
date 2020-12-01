@@ -9,21 +9,22 @@ const Profile = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
+    //Update profile handler
     const onSubmit = async (data) => {
         try {
             const response = await authUpdate('PUT', { ...data }, getId(), getUserToken());
             console.log(response);
             toast.success(response.message);
         } catch (err) {
-            console.log(err);
+            toast.error('INTERNAL SERVER ERROR. PLEASE TRY LATER')
+            history.push('/')
         }
     }
 
+    //Logout of the profile and reverts back to Phone page.
     const logOutHandler = async () => {
         try {
             const response = await logoutProfile(getId(), getUserToken())
-            console.log(response);
-
             if (response.success) {
                 clearStorage();
                 history.push('/')

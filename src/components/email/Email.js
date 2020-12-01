@@ -10,6 +10,8 @@ const Email = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
+    //handles posting email, it proceed to email verification component
+
     const submitHandler = async (data, e) => {
         const { email } = data;
         try {

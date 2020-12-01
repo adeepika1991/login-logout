@@ -9,9 +9,6 @@ export const OtpPage = styled(PhonePage)`
 
 export const OtpForm = styled(Form)` 
 
-
- 
-
 `
 
 export const Resend = styled.div` 

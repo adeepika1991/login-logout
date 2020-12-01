@@ -11,6 +11,9 @@ const SignUp = ({ toast }) => {
     const { register, handleSubmit, errors } = useForm();
     const [referralMessage, setReferralMessage] = useState('');
 
+
+    //Signup form post handler, if response is success, proceeds to profile
+    //else revert to phone component
     const onSubmit = async (data) => {
         try {
             const response = await postData('POST', {
@@ -33,6 +36,7 @@ const SignUp = ({ toast }) => {
         }
     }
 
+    //handles the refferral code
     const onBlurHandle = async (e) => {
         const response = await urlData(`users/referral/${e.target.value}`);
         if (response.success) {

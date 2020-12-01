@@ -11,7 +11,7 @@ export const validateNumber = (event) => {
 
 }
 
-//Reusable post function
+//Reusable post function which can be used for PUT method too
 
 export const postData = async (method, data, url) => {
     const requestOptions = {
@@ -29,6 +29,7 @@ export const postData = async (method, data, url) => {
 
 }
 
+//used for PUT method without any body object
 export const urlData = async (url) => {
     const requestOptions = {
         method: 'PUT'
@@ -42,7 +43,7 @@ export const urlData = async (url) => {
     return postResponse;
 }
 
-
+//Authentication function
 export const authUpdate = async (method, data, id, token) => {
     const requestOptions = {
         method,
@@ -60,7 +61,7 @@ export const authUpdate = async (method, data, id, token) => {
     return updateResponse;
 }
 
-
+//Logout profile function
 export const logoutProfile = async (id, token) => {
     const requestOptions = {
         method: "DELETE",

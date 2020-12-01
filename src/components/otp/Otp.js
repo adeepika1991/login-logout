@@ -10,6 +10,10 @@ const Otp = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
+
+    //Verifies otp, if the user enters otp wrongle more than 3 times 
+    //reverts back to phone component
+    //If the user is already registered then proceeds to profile component
     const submitHandler = async (data, e) => {
 
         try {
@@ -49,7 +53,8 @@ const Otp = ({ toast }) => {
 
         }
     }
-
+    //In case user didn't get otp, this can resend otp upto 3 times
+    //otherwise reverts back to phone
     const resendHandler = async () => {
         try {
             const response = await postData('PUT', {

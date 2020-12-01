@@ -9,6 +9,10 @@ const VerifyEmail = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
+
+    //Similar to OTP component, this will verify email token's authenticity upto 3 times
+    //Otherwise revert back to Phone component
+    //on success, proceeds to signup procedure
     const submitHandler = async (data, e) => {
         try {
             const response = await postData('POST', {
@@ -16,8 +20,6 @@ const VerifyEmail = ({ toast }) => {
                 token: getToken(),
                 ...data
             }, 'users/email/verify');
-            // console.log(response);
-
             if (response.success) {
                 history.push('/signup');
                 toast.success(response.message);
@@ -37,6 +39,8 @@ const VerifyEmail = ({ toast }) => {
             toast.error('INTERNAL SERVER ERROR');
         }
     }
+
+    // resends email token upto 3 times
 
     const resendHandler = async () => {
         try {

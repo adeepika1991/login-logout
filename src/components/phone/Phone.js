@@ -10,7 +10,7 @@ const Phone = ({ toast }) => {
     const history = useHistory();
     const { register, handleSubmit, errors } = useForm();
 
-    //
+    //Post phone number and proceeds to next page to verify otp
     const submitHandler = async (data) => {
         try {
             const response = await postData('POST', data, 'users/phone');
